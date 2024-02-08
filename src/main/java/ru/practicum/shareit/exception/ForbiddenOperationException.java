@@ -1,9 +1,9 @@
 package ru.practicum.shareit.exception;
 
 public class ForbiddenOperationException extends RuntimeException {
-    public final static String NOT_OWNER_ITEM_MESSAGE = "Запрещённая операция. " +
+    public static final String NOT_OWNER_ITEM_MESSAGE = "Запрещённая операция. " +
             "Нет доступа к изменению данных о предмете у пользователя с id = ";
-    public final static String NOT_OWNER_ITEM_ADVICE = "Данные о предмете может менять только его владелец.";
+    public static final String NOT_OWNER_ITEM_ADVICE = "Данные о предмете может менять только его владелец.";
 
     private final String adviceToUser;
 

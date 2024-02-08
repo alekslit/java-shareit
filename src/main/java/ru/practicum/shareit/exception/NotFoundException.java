@@ -1,8 +1,8 @@
 package ru.practicum.shareit.exception;
 
 public class NotFoundException extends RuntimeException {
-    public final static String USER_NOT_FOUND_MESSAGE = "Пользователя с таким id не существует. id = ";
-    public final static String USER_NOT_FOUND_ADVICE = "Пожалуйста проверьте корректность id пользователя.";
+    public static final String USER_NOT_FOUND_MESSAGE = "Пользователя с таким id не существует. id = ";
+    public static final String USER_NOT_FOUND_ADVICE = "Пожалуйста проверьте корректность id пользователя.";
 
     private final String adviceToUser;
 

@@ -1,8 +1,8 @@
 package ru.practicum.shareit.exception;
 
 public class AlreadyExistException extends RuntimeException {
-    public final static String DUPLICATE_EMAIL_MESSAGE = "Пользователь с таким email уже существует. email = ";
-    public final static String DUPLICATE_EMAIL_ADVICE = "Пожалуйста, замените email.";
+    public static final String DUPLICATE_EMAIL_MESSAGE = "Пользователь с таким email уже существует. email = ";
+    public static final String DUPLICATE_EMAIL_ADVICE = "Пожалуйста, замените email.";
 
     private final String adviceToUser;
 
