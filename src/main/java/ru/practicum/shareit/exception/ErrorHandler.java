@@ -37,10 +37,9 @@ public class ErrorHandler {
         return errorResponse;
     }
 
-    /*------Обработчики для статуса 403 (Forbidden)------*/
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse handleForbiddenOperationException(final ForbiddenOperationException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNotAvailableException(final NotAvailableException e) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .error(e.getMessage())
                 .adviceToUser(e.getAdviceToUser())
@@ -51,6 +50,18 @@ public class ErrorHandler {
     }
 
     /*------Обработчики для статуса 404 (Not found)------*/
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleForbiddenOperationException(final ForbiddenOperationException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .error(e.getMessage())
+                .adviceToUser(e.getAdviceToUser())
+                .build();
+        log.debug("{}: {}", e.getClass().getSimpleName(), e.getMessage());
+
+        return errorResponse;
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
