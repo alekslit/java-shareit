@@ -217,7 +217,7 @@ public class ItemServiceImpl implements ItemService {
                     "Пользователь с id", userId, "не брал предмет с id", itemId, "в аренду.");
             throw  new NotFoundException(String.format("Пользователь с id = %d, не брал предмет с id = %d в аренду.",
                     userId, itemId), BOOKING_NOT_FOUND_ADVICE);
-        };
+        }
 
         return bookingList;
     }
