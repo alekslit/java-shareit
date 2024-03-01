@@ -1,23 +1,30 @@
 package ru.practicum.shareit.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 
 @Data
 @Builder(toBuilder = true)
+@Entity
+@Table(name = "users", schema = "public")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     // идентификатор пользователя:
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
     // имя пользователя:
+    @Column(name = "name")
     private String name;
 
     //электронная почта:
-    @NotNull(message = "Адрес электронной почты не может быть пустым")
-    @Email(regexp = "([A-Za-z0-9]{1,}[\\\\-]{0,1}[A-Za-z0-9]{1,}[\\\\.]{0,1}[A-Za-z0-9]{1,})+@"
-            + "([A-Za-z0-9]{1,}[\\\\-]{0,1}[A-Za-z0-9]{1,}[\\\\.]{0,1}[A-Za-z0-9]{1,})+[\\\\.]{1}[a-z]{2,10}",
-            message = "Некорректный адресс электронной почты: ${validatedValue}")
+    @Column(name = "email")
     private String email;
 }
