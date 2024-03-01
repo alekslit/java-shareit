@@ -12,9 +12,9 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static ru.practicum.shareit.exception.ForbiddenOperationException.*;
 import static ru.practicum.shareit.exception.NotAvailableException.*;
@@ -154,10 +154,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void checkStateFilter(String state) {
-        List<String> filterList = Stream.of(BookingFilterState.values())
-                .map(BookingFilterState::name)
-                .collect(Collectors.toList());
-        if (!filterList.contains(state)) {
+        boolean isCorrectState = Arrays.stream(BookingFilterState.values())
+                .anyMatch(filterState -> filterState.name().equals(state));
+
+        if (!isCorrectState) {
             log.debug("{}: {}{}.", NotAvailableException.class.getSimpleName(), NOT_AVAILABLE_STATE_MESSAGE, state);
             throw new NotAvailableException(NOT_AVAILABLE_STATE_MESSAGE + state, NOT_AVAILABLE_STATE_ADVICE);
         }

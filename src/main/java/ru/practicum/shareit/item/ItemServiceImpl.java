@@ -246,12 +246,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void checkBooking(List<Booking> bookingList) {
-        bookingList = bookingList.stream()
-                .filter(booking -> booking.getStatus().equals(BookingStatus.APPROVED)
-                        && booking.getStart().isBefore(LocalDateTime.now()))
-                .collect(Collectors.toList());
+        boolean anyBookingApprovedAndStarted = bookingList.stream()
+                .anyMatch(booking -> booking.getStatus().equals(BookingStatus.APPROVED)
+                        && booking.getStart().isBefore(LocalDateTime.now()));
 
-        if (bookingList.size() == 0) {
+        if (!anyBookingApprovedAndStarted) {
             log.debug("{}: {}.", NotAvailableException.class.getSimpleName(), NOT_AVAILABLE_COMMENT_MESSAGE);
             throw new NotAvailableException(NOT_AVAILABLE_COMMENT_MESSAGE, NOT_AVAILABLE_COMMENT_ADVICE);
         }
