@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.db;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +10,8 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingFromRequest;
 import ru.practicum.shareit.exception.NotAvailableException;
+import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
@@ -25,7 +27,7 @@ import static ru.practicum.shareit.exception.NotAvailableException.NOT_AVAILABLE
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemServiceImplTestWithDb {
+public class ItemServiceImplTest {
     private final ItemService itemService;
     private final UserService userService;
     private final BookingService bookingService;

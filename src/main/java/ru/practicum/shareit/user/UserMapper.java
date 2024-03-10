@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class UserMapper {
+public final class UserMapper {
     // метод для преобразования UserDto в User:
     public static User mapToUser(UserDto userDto) {
         User user = User.builder()

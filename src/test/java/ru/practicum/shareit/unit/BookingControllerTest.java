@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,6 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingController;
+import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingFromRequest;
 import ru.practicum.shareit.exception.ForbiddenOperationException;
 import ru.practicum.shareit.exception.NotAvailableException;
@@ -20,7 +23,7 @@ import static ru.practicum.shareit.exception.ForbiddenOperationException.NOT_OWN
 import static ru.practicum.shareit.exception.NotAvailableException.NOT_AVAILABLE_DATE_TIME_MESSAGE;
 
 @ExtendWith(MockitoExtension.class)
-public class BookingControllerTestUnit {
+public class BookingControllerTest {
     private BookingController bookingController;
     @Mock
     private BookingService bookingService;

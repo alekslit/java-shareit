@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.mvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.exception.ForbiddenOperationException;
 import ru.practicum.shareit.exception.NotAvailableException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.ItemController;
 import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
@@ -30,7 +31,7 @@ import static ru.practicum.shareit.exception.NotFoundException.ITEM_NOT_FOUND_AD
 import static ru.practicum.shareit.exception.NotFoundException.ITEM_NOT_FOUND_MESSAGE;
 
 @WebMvcTest(controllers = ItemController.class)
-public class ItemControllerTestWithMockMvc {
+public class ItemControllerTest {
     @MockBean
     private ItemController itemController;
     @Autowired

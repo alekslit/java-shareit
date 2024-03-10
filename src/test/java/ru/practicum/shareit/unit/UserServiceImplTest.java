@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import ru.practicum.shareit.exception.AlreadyExistException;
+import ru.practicum.shareit.user.*;
 
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.practicum.shareit.exception.AlreadyExistException.DUPLICATE_EMAIL_MESSAGE;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplTestUnit {
+public class UserServiceImplTest {
     private UserService userService;
     private UserDto userDto;
     @Mock
