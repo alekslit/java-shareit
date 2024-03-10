@@ -123,4 +123,17 @@ public class ItemControllerTest {
         assertTrue(exception.getMessage()
                 .contains("Параметр запроса from, должен быть положительным числом или нулём."));
     }
+
+    @Test
+    public void searchItemsByNameOrDescriptionTest() {
+        User user = userService.saveUser(userDto);
+        Item item = itemService.saveItem(user.getId(), itemDto);
+        Item item2 = itemService.saveItem(user.getId(), itemDto2);
+
+        List<ItemDto> itemList = itemController.searchItemsByNameOrDescription("test2", 0, 10);
+
+        assertEquals(1, itemList.size());
+        assertEquals(item.getId(), itemList.get(0).getId());
+        assertEquals("test2", item.getName());
+    }
 }

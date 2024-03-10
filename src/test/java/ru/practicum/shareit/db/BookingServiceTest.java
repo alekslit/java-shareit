@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingFromRequest;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -20,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.practicum.shareit.exception.NotFoundException.BOOKING_NOT_FOUND_MESSAGE;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -96,5 +99,13 @@ public class BookingServiceTest {
 
         assertEquals(1, bookingList.size());
         assertEquals(savedBooking1, bookingList.get(0));
+    }
+
+    @Test
+    public void getExceptionWhenNotBooking() {
+        final NotFoundException e = assertThrows(NotFoundException.class,
+                () -> bookingService.getBookingById(10L));
+
+        assertEquals(BOOKING_NOT_FOUND_MESSAGE + 10, e.getMessage());
     }
 }
