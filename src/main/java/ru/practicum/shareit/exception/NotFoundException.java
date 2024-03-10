@@ -7,6 +7,8 @@ public class NotFoundException extends RuntimeException {
     public static final String ITEM_NOT_FOUND_ADVICE = "Пожалуйста проверьте корректность id предмета.";
     public static final String BOOKING_NOT_FOUND_MESSAGE = "Бронирования предмета с таким id не существует. id = ";
     public static final String BOOKING_NOT_FOUND_ADVICE = "Пожалуйста проверьте корректность id бронирования предмета.";
+    public static final String REQUEST_NOT_FOUND_MESSAGE = "Запроса на предмет с таким id не существует. id = ";
+    public static final String REQUEST_NOT_FOUND_ADVICE = "Пожалуйста проверьте корректность id запроса на предмет.";
 
     private final String adviceToUser;
 

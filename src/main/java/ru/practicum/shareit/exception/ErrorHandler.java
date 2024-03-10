@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 @RestControllerAdvice("ru.practicum.shareit")
 @Slf4j
 public class ErrorHandler {
@@ -45,6 +47,18 @@ public class ErrorHandler {
                 .adviceToUser(e.getAdviceToUser())
                 .build();
         log.debug("{}: {}", e.getClass().getSimpleName(), e.getMessage());
+
+        return errorResponse;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleConstraintViolationException(final ConstraintViolationException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .error("Ошибка валидации данных из запроса.")
+                .adviceToUser(e.getMessage())
+                .build();
+        log.debug("{}: {}", ConstraintViolationException.class.getSimpleName(), e.getMessage());
 
         return errorResponse;
     }
@@ -93,7 +107,7 @@ public class ErrorHandler {
     public ErrorResponse handleThrowable(final Throwable e) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .error("Произошла непредвиденная ошибка.")
-                .adviceToUser("Пожалуйста обратитесь в службу технической поддержки.")
+                .adviceToUser("Пожалуйста, обратитесь в службу технической поддержки.")
                 .build();
         log.debug("{}: {}", e.getClass().getSimpleName(), e.getMessage());
 

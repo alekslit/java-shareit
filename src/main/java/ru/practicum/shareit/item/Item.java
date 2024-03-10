@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import lombok.*;
+import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
@@ -35,4 +36,10 @@ public class Item {
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
+
+    // запрос на предмет (если он добавлен по запросу):
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    @ToString.Exclude
+    private ItemRequest itemRequest;
 }

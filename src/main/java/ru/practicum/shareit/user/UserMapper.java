@@ -18,17 +18,6 @@ final class UserMapper {
         return user;
     }
 
-    // метод для преобразования UserDto в User с id:
-    public static User mapToUser(UserDto userDto, Long userId) {
-        User user = User.builder()
-                .id(userId)
-                .name(userDto.getName())
-                .email(userDto.getEmail())
-                .build();
-
-        return user;
-    }
-
     // метод для преобразования User в UserDto:
     public static UserDto mapToUserDto(User user) {
         UserDto userDto = UserDto.builder()

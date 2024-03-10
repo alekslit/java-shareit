@@ -2,8 +2,11 @@ package ru.practicum.shareit.booking;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingForItemDto;
+import ru.practicum.shareit.booking.dto.BookingFromRequest;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.ItemForBookingDto;
+import ru.practicum.shareit.item.dto.ItemForBookingDto;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserForBookingDto;
 
