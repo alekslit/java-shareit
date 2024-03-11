@@ -21,19 +21,15 @@ public class UserServiceImplTest {
     private UserService userService;
     private UserDto userDto;
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         userService = new UserServiceImpl(userRepository);
         userDto = UserDto.builder()
                 .name("test1")
                 .email("test1")
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test

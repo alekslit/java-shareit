@@ -41,7 +41,8 @@ public class BookingServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         bookingService = new BookingServiceImpl(bookingRepository, userRepository, itemRepository);
         item = Item.builder()
                 .available(false)
@@ -52,11 +53,6 @@ public class BookingServiceImplTest {
         booking = Booking.builder()
                 .status(BookingStatus.APPROVED)
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test
@@ -125,6 +121,5 @@ public class BookingServiceImplTest {
         assertEquals(futureBooking, future.get(0));
         assertEquals(1, rejected.size());
         assertEquals(rejectedBooking, rejected.get(0));
-
     }
 }

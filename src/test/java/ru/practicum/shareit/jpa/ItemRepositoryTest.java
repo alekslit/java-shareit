@@ -23,7 +23,8 @@ public class ItemRepositoryTest {
     private Item item;
     private User user;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         user = User.builder()
                 .name("test2")
                 .email("test2")
@@ -34,11 +35,6 @@ public class ItemRepositoryTest {
                 .available(true)
                 .user(user)
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     // тест для метода репозитория написанного через @Query:

@@ -35,7 +35,8 @@ public class UserControllerTest {
     private MockMvc mvc;
     private User user;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         mvc = MockMvcBuilders
                 .standaloneSetup(userController)
                 .build();
@@ -44,11 +45,6 @@ public class UserControllerTest {
                 .name("test1")
                 .email("test1@test.com")
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     /*--- POST /users ---*/
@@ -61,7 +57,6 @@ public class UserControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(user.getName())))
@@ -78,7 +73,6 @@ public class UserControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(user.getName())))
@@ -95,7 +89,6 @@ public class UserControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(user.getName())))
@@ -108,7 +101,6 @@ public class UserControllerTest {
         when(userService.findAllUsers()).thenReturn(List.of(user));
 
         mvc.perform(get("/users"))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(user.getId()), Long.class))
@@ -122,7 +114,6 @@ public class UserControllerTest {
         userService.deleteUserById(any());
 
         mvc.perform(delete("/users/1"))
-
                 .andExpect(status().isOk());
     }
 }

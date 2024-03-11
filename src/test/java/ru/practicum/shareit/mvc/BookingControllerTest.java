@@ -43,7 +43,8 @@ public class BookingControllerTest {
     private MockMvc mvc;
     private Booking booking;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         mvc = MockMvcBuilders
                 .standaloneSetup(bookingController)
                 .build();
@@ -59,11 +60,6 @@ public class BookingControllerTest {
                 .build();
     }
 
-    @BeforeEach
-    public void setUp() {
-        init();
-    }
-
     /*--- POST /bookings ---*/
     @Test
     public void saveBookingTest() throws Exception {
@@ -75,7 +71,6 @@ public class BookingControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(booking.getId()), Long.class))
                 .andExpect(jsonPath("$.status", is(booking.getStatus().name())));
@@ -93,7 +88,6 @@ public class BookingControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(booking.getId()), Long.class))
                 .andExpect(jsonPath("$.status", is(booking.getStatus().name())));
@@ -110,7 +104,6 @@ public class BookingControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(booking.getId()), Long.class))
                 .andExpect(jsonPath("$.status", is(booking.getStatus().name())));
@@ -124,7 +117,6 @@ public class BookingControllerTest {
 
         mvc.perform(get("/bookings")
                         .header("X-Sharer-User-Id", 1))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(booking.getId()), Long.class))
@@ -139,7 +131,6 @@ public class BookingControllerTest {
 
         mvc.perform(get("/bookings/owner")
                         .header("X-Sharer-User-Id", 1))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(booking.getId()), Long.class))

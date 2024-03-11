@@ -33,7 +33,8 @@ public class ItemRequestControllerTest {
     private ItemDto item;
     private UserDto user3;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         request1 = ItemRequestDto.builder()
                 .description("test1")
                 .build();
@@ -60,11 +61,6 @@ public class ItemRequestControllerTest {
                 .name("test7")
                 .email("test7")
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test

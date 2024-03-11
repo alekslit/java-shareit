@@ -42,7 +42,8 @@ public class ItemRequestControllerTest {
     private MockMvc mvc;
     private ItemRequest request;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         mvc = MockMvcBuilders
                 .standaloneSetup(itemRequestController)
                 .build();
@@ -50,11 +51,6 @@ public class ItemRequestControllerTest {
                 .id(1L)
                 .description("test1")
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     /*--- POST /requests ---*/
@@ -68,7 +64,6 @@ public class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(request.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(request.getDescription())));
@@ -83,7 +78,6 @@ public class ItemRequestControllerTest {
 
         mvc.perform(get("/requests")
                         .header("X-Sharer-User-Id", 1))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(request.getId()), Long.class))
@@ -99,7 +93,6 @@ public class ItemRequestControllerTest {
 
         mvc.perform(get("/requests/all")
                         .header("X-Sharer-User-Id", 1))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(request.getId()), Long.class))
@@ -115,7 +108,6 @@ public class ItemRequestControllerTest {
 
         mvc.perform(get("/requests/1")
                         .header("X-Sharer-User-Id", 1))
-
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(request.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(request.getDescription())));

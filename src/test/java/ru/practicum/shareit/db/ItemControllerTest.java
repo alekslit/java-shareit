@@ -42,7 +42,8 @@ public class ItemControllerTest {
     private UserDto userDto2;
     private ItemDto itemDto2;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         userDto = UserDto.builder()
                 .name("test1")
                 .email("test1")
@@ -72,11 +73,6 @@ public class ItemControllerTest {
                 .description("test4")
                 .available(true)
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test

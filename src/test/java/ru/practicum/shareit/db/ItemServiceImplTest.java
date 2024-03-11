@@ -39,7 +39,8 @@ public class ItemServiceImplTest {
     private BookingFromRequest nextBooking;
     private CommentDto commentDto;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         userDto = UserDto.builder()
                 .name("test1")
                 .email("test1")
@@ -64,11 +65,6 @@ public class ItemServiceImplTest {
                 .start(LocalDateTime.now().plusDays(1))
                 .end(LocalDateTime.now().plusDays(3))
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test

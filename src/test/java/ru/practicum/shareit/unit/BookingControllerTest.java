@@ -30,7 +30,8 @@ public class BookingControllerTest {
     private Booking booking1;
     private BookingFromRequest booking2;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         bookingController = new BookingController(bookingService);
         booking1 = Booking.builder()
                 .item(Item.builder()
@@ -42,11 +43,6 @@ public class BookingControllerTest {
                 .start(LocalDateTime.now().plusDays(3))
                 .end(LocalDateTime.now().plusDays(2))
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test

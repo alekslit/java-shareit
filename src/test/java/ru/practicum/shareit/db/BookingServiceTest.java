@@ -37,7 +37,8 @@ public class BookingServiceTest {
     private BookingFromRequest booking1;
     private BookingFromRequest booking2;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         user1 = UserDto.builder()
                 .name("test1")
                 .email("test1")
@@ -59,11 +60,6 @@ public class BookingServiceTest {
                 .start(LocalDateTime.now().plusDays(1))
                 .end(LocalDateTime.now().plusDays(3))
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test

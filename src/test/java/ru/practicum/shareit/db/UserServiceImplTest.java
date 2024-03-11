@@ -25,7 +25,8 @@ public class UserServiceImplTest {
     private UserDto user1;
     private UserDto user2;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         user1 = UserDto.builder()
                 .name("test1")
                 .email("test1")
@@ -34,11 +35,6 @@ public class UserServiceImplTest {
                 .name("test2")
                 .email("test2")
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     @Test

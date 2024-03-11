@@ -41,7 +41,8 @@ public class ItemControllerTest {
     private ItemDto item;
     private CommentDto comment;
 
-    public void init() {
+    @BeforeEach
+    public void setUp() {
         item = ItemDto.builder()
                 .name("test1")
                 .description("test1")
@@ -50,11 +51,6 @@ public class ItemControllerTest {
         comment = CommentDto.builder()
                 .text("test2")
                 .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
     }
 
     /*--- POST /items ---*/
@@ -70,7 +66,6 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error",
                         is("Ошибка валидации данных из запроса.")))
@@ -90,7 +85,6 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error",
                         is(NOT_AVAILABLE_COMMENT_MESSAGE)))
@@ -110,7 +104,6 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error",
                         is(NOT_OWNER_ITEM_MESSAGE + 1)))
@@ -129,7 +122,6 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error",
                         is(ITEM_NOT_FOUND_MESSAGE + 1)))
@@ -144,7 +136,6 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error",
                         is("Отсутствует заголовок запроса: X-Sharer-User-Id")))
@@ -162,7 +153,6 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error",
                         is("Произошла непредвиденная ошибка.")))
