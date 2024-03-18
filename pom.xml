@@ -173,12 +173,6 @@
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>0.8.8</version>
 					<configuration>
-						<excludes>
-							<exclude>gateway/**/*Client.*</exclude>
-							<exclude>gateway/**/*Controller.*</exclude>
-							<exclude>gateway/**/*State.*</exclude>
-
-						</excludes>
 						<output>file</output>
 					</configuration>
 					<executions>
