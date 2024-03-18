@@ -1,14 +1,14 @@
 package ru.practicum.shareit.unit;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+/*import org.junit.jupiter.api.Test;*/
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
+/*import org.springframework.http.ResponseEntity;*/
 import ru.practicum.shareit.item.ItemClient;
 import ru.practicum.shareit.item.ItemController;
-import ru.practicum.shareit.item.dto.ItemDto;
+/*import ru.practicum.shareit.item.dto.ItemDto;*/
 
 @ExtendWith(MockitoExtension.class)
 public class ItemControllerTest {
