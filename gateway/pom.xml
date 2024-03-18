@@ -78,6 +78,9 @@
                         <exclude>**/*Client.class</exclude>
                         <exclude>**/*Controller.class</exclude>
                         <exclude>**/*State.class</exclude>
+                        <exclude>**/*Handler.class</exclude>
+                        <exclude>**/*Exception.class</exclude>
+                        <exclude>**/*App.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
