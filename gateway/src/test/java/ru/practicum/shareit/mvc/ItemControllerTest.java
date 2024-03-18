@@ -1,5 +1,6 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.mvc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ItemController.class)
-public class ItemControllerWithMvcTest {
+public class ItemControllerTest {
     @MockBean
     private ItemController itemController;
     @Autowired

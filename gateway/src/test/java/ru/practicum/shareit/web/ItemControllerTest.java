@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.web;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemControllerWithEnvTest {
+public class ItemControllerTest {
     private final ItemController itemController;
 
     @Test
