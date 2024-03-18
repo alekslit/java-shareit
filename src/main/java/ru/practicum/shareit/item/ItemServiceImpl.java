@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
@@ -10,6 +11,13 @@ import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.exception.ForbiddenOperationException;
 import ru.practicum.shareit.exception.NotAvailableException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.comment.Comment;
+import ru.practicum.shareit.item.comment.CommentDto;
+import ru.practicum.shareit.item.comment.CommentMapper;
+import ru.practicum.shareit.item.comment.CommentRepository;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -32,13 +40,20 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
-    /*-------Основные методы-------*/
+    /*-------Основные методы (Item)-------*/
     @Override
     public Item saveItem(Long userId, ItemDto itemDto) {
         log.debug("Попытка добавить новый объект Item.");
         User user = getUserById(userId);
-        Item item = itemRepository.save(ItemMapper.mapToItem(itemDto, user));
+        Item item = ItemMapper.mapToItem(itemDto, user);
+        // если есть id запроса на предмет:
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = getItemRequestById(itemDto.getRequestId());
+            item.setItemRequest(itemRequest);
+        }
+        item = itemRepository.save(item);
 
         return item;
     }
@@ -64,22 +79,42 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> findAllItemsByOwnerId(Long userId) {
+    public List<Item> findAllItemsByOwnerId(Long userId, int from, int size) {
         log.debug("Попытка получить список объектов Item по id пользователя (владельца).");
-        List<Item> itemList = itemRepository.findAllByUserId(userId);
+        PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
+        List<Item> itemList = itemRepository.findAllByUserId(userId, pageRequest).getContent();
 
         return itemList;
     }
 
     @Override
-    public List<Item> searchItemsByNameOrDescription(String text) {
+    public List<Item> searchItemsByNameOrDescription(String text, int from, int size) {
         log.debug("Попытка найти список объектов Item по их названию и/или описанию.");
+        PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
         List<Item> itemList = (text.isBlank() ?
-                new ArrayList<>() : itemRepository.searchItemsByNameOrDescription(text));
+                new ArrayList<>() : itemRepository.searchItemsByNameOrDescription(text, pageRequest).getContent());
 
         return itemList;
     }
 
+    /*-------Основные методы (Comment)-------*/
+    @Override
+    public Comment saveComment(Long userId, Long itemId, CommentDto commentDto) {
+        log.debug("Попытка добавить новый объект Comment.");
+        // проверяем что User и Item существуют:
+        User user = getUserById(userId);
+        Item item = getItemById(itemId);
+        // проверяем, что аренда (Booking) существует:
+        List<Booking> bookingList = getBookingsByUserIdAndItemId(userId, itemId);
+        // проверяем что аренда состоялась:
+        checkBooking(bookingList);
+        // сохраняем комментарий:
+        Comment comment = commentRepository.save(CommentMapper.mapToComment(commentDto, user, item));
+
+        return comment;
+    }
+
+    /*-------Вспомогательные методы (Booking)-------*/
     @Override
     public ItemDto addBookingsDtoToItem(ItemDto itemDto) {
         List<Booking> bookingList = bookingRepository.findAllByItemIdOrderByStartAsc(itemDto.getId()).stream()
@@ -101,7 +136,7 @@ public class ItemServiceImpl implements ItemService {
         // находим все Booking:
         List<Booking> bookingList = bookingRepository.findAllByItemIdInOrderByStartAsc(itemIdList);
         // проходим по списку Booking id-шниками Item:
-        for (ItemDto item: itemDtoList) {
+        for (ItemDto item : itemDtoList) {
             List<Booking> itemBookings = bookingList.stream()
                     .filter(booking -> booking.getItem().getId().equals(item.getId())
                             && !booking.getStatus().equals(BookingStatus.REJECTED))
@@ -116,22 +151,7 @@ public class ItemServiceImpl implements ItemService {
         return result;
     }
 
-    @Override
-    public Comment saveComment(Long userId, Long itemId, CommentDto commentDto) {
-        log.debug("Попытка добавить новый объект Comment.");
-        // проверяем что User и Item существуют:
-        User user = getUserById(userId);
-        Item item = getItemById(itemId);
-        // проверяем, что аренда (Booking) существует:
-        List<Booking> bookingList = getBookingsByUserIdAndItemId(userId, itemId);
-        // проверяем что аренда состоялась:
-        checkBooking(bookingList);
-        // сохраняем комментарий:
-        Comment comment = commentRepository.save(CommentMapper.mapToComment(commentDto, user, item));
-
-        return comment;
-    }
-
+    /*-------Вспомогательные методы (Comment)-------*/
     @Override
     public ItemDto addCommentToItem(ItemDto itemDto) {
         List<Comment> commentList = commentRepository.findAllByItemId(itemDto.getId());
@@ -151,7 +171,7 @@ public class ItemServiceImpl implements ItemService {
         // находим все Comment:
         List<Comment> commentList = commentRepository.findAllByItemIdIn(itemIdList);
         // проходим по списку Comment id-шниками Item, и находим все комментарии к предмету:
-        for (ItemDto item: itemDtoList) {
+        for (ItemDto item : itemDtoList) {
             List<Comment> commentByItem = commentList.stream()
                     .filter(comment -> comment.getItem().getId().equals(item.getId()))
                     .collect(Collectors.toList());
@@ -164,8 +184,7 @@ public class ItemServiceImpl implements ItemService {
         return result;
     }
 
-    /*-------Вспомогательные методы-------*/
-    // метод для проверки владельца предмета:
+    /*-------Вспомогательные методы (Остальные)-------*/
     private Item checkOwnerItem(Long userId, Long itemId) {
         Item item = getItemById(itemId);
         if (!item.getUser().getId().equals(userId)) {
@@ -215,7 +234,7 @@ public class ItemServiceImpl implements ItemService {
         if (bookingList.size() == 0) {
             log.debug("{}: {} = {}, {} = {} {}.", NotFoundException.class.getSimpleName(),
                     "Пользователь с id", userId, "не брал предмет с id", itemId, "в аренду.");
-            throw  new NotFoundException(String.format("Пользователь с id = %d, не брал предмет с id = %d в аренду.",
+            throw new NotFoundException(String.format("Пользователь с id = %d, не брал предмет с id = %d в аренду.",
                     userId, itemId), BOOKING_NOT_FOUND_ADVICE);
         }
 
@@ -254,5 +273,14 @@ public class ItemServiceImpl implements ItemService {
             log.debug("{}: {}.", NotAvailableException.class.getSimpleName(), NOT_AVAILABLE_COMMENT_MESSAGE);
             throw new NotAvailableException(NOT_AVAILABLE_COMMENT_MESSAGE, NOT_AVAILABLE_COMMENT_ADVICE);
         }
+    }
+
+    private ItemRequest getItemRequestById(Long requestId) {
+        ItemRequest itemRequest = itemRequestRepository.findById(requestId).orElseThrow(() -> {
+            log.debug("{}: {}{}.", NotFoundException.class.getSimpleName(), REQUEST_NOT_FOUND_MESSAGE, requestId);
+            return new NotFoundException(REQUEST_NOT_FOUND_MESSAGE + requestId, REQUEST_NOT_FOUND_ADVICE);
+        });
+
+        return itemRequest;
     }
 }

@@ -2,29 +2,18 @@ package ru.practicum.shareit.item;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemForItemRequest;
 import ru.practicum.shareit.user.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class ItemMapper {
+public final class ItemMapper {
     // метод для преобразования ItemDto в Item:
     public static Item mapToItem(ItemDto itemDto, User user) {
         Item item = Item.builder()
-                .name(itemDto.getName())
-                .description(itemDto.getDescription())
-                .available(itemDto.getAvailable())
-                .user(user)
-                .build();
-
-        return item;
-    }
-
-    // метод для преобразования ItemDto в Item с id:
-    public static Item mapToItem(ItemDto itemDto, User user, Long itemId) {
-        Item item = Item.builder()
-                .id(itemId)
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
                 .available(itemDto.getAvailable())
@@ -41,6 +30,7 @@ final class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(item.getItemRequest() != null ? item.getItemRequest().getId() : null)
                 .build();
 
         return itemDto;
@@ -53,5 +43,25 @@ final class ItemMapper {
                 .collect(Collectors.toList());
 
         return itemDtoList;
+    }
+
+    public static ItemForItemRequest mapToItemForItemRequest(Item item) {
+        ItemForItemRequest itemForItemRequest = ItemForItemRequest.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(item.getItemRequest().getId())
+                .build();
+
+        return itemForItemRequest;
+    }
+
+    public static List<ItemForItemRequest> mapToItemForItemRequest(List<Item> itemList) {
+        List<ItemForItemRequest> itemForItemRequestList = itemList.stream()
+                .map(ItemMapper::mapToItemForItemRequest)
+                .collect(Collectors.toList());
+
+        return itemForItemRequestList;
     }
 }

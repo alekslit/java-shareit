@@ -23,7 +23,7 @@ public class UserController {
         return UserMapper.mapToUserDto(service.updateUser(userDto, userId));
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable Long userId) {
         return UserMapper.mapToUserDto(service.getUserById(userId));
     }
@@ -33,7 +33,7 @@ public class UserController {
         return UserMapper.mapToUserDto(service.findAllUsers());
     }
 
-    @DeleteMapping("{userId}")
+    @DeleteMapping("/{userId}")
     public void deleteUserById(@PathVariable Long userId) {
         service.deleteUserById(userId);
     }

@@ -2,10 +2,15 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingFromRequest;
 import ru.practicum.shareit.exception.ForbiddenOperationException;
 import ru.practicum.shareit.exception.NotAvailableException;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +23,7 @@ import static ru.practicum.shareit.exception.NotAvailableException.NOT_AVAILABLE
 @RequiredArgsConstructor
 @RequestMapping(path = "/bookings")
 @Slf4j
+@Validated
 public class BookingController {
     private final BookingService service;
 
@@ -48,16 +54,26 @@ public class BookingController {
 
     // получение списка бронирований для пользователя (автора бронирования):
     @GetMapping
-    public List<BookingDto> getAllUserBookings(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                               @RequestParam(defaultValue = "ALL") String state) {
-        return BookingMapper.mapToBookingDto(service.getAllUserBookings(userId, state));
+    public List<BookingDto> getAllUserBookings(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "0") @PositiveOrZero(message = "Параметр запроса from, должен быть " +
+                    "положительным числом или нулём.") int from,
+            @RequestParam(defaultValue = "10") @Positive(message = "Параметр запроса size, должен быть " +
+                    "положительным числом.") int size) {
+        return BookingMapper.mapToBookingDto(service.getAllUserBookings(userId, state, from, size));
     }
 
     // получение списка бронирований всех предметов пользователя (владельца предметов):
     @GetMapping("/owner")
-    public List<BookingDto> getAllOwnerItemsBookings(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                     @RequestParam(defaultValue = "ALL") String state) {
-        return BookingMapper.mapToBookingDto(service.getAllOwnerItemsBookings(userId, state));
+    public List<BookingDto> getAllOwnerItemsBookings(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "0") @PositiveOrZero(message = "Параметр запроса from, должен быть " +
+                    "положительным числом или нулём.") int from,
+            @RequestParam(defaultValue = "10") @Positive(message = "Параметр запроса size, должен быть " +
+                    "положительным числом.") int size) {
+        return BookingMapper.mapToBookingDto(service.getAllOwnerItemsBookings(userId, state, from, size));
     }
 
     /*---------Вспомогательные методы---------*/
@@ -78,7 +94,7 @@ public class BookingController {
                 || (bookingFromRequest.getEnd().isBefore(LocalDateTime.now())
                 || bookingFromRequest.getStart().isBefore(LocalDateTime.now()))
                 || bookingFromRequest.getEnd().isBefore(bookingFromRequest.getStart())) {
-            log.debug("{}: {}.", NotAvailableException.class.getSimpleName(), NOT_AVAILABLE_DATE_TIME_MESSAGE);
+            log.debug("{}: {}", NotAvailableException.class.getSimpleName(), NOT_AVAILABLE_DATE_TIME_MESSAGE);
             throw new NotAvailableException(NOT_AVAILABLE_DATE_TIME_MESSAGE, NOT_AVAILABLE_DATE_TIME_ADVICE);
         }
     }

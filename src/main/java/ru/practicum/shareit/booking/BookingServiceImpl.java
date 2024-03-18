@@ -2,7 +2,9 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.dto.BookingFromRequest;
 import ru.practicum.shareit.exception.ForbiddenOperationException;
 import ru.practicum.shareit.exception.NotAvailableException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -65,24 +67,28 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getAllUserBookings(Long userId, String state) {
+    public List<Booking> getAllUserBookings(Long userId, String state, int from, int size) {
         log.debug("Попытка получить список объектов Booking по id их автора.");
         checkStateFilter(state);
         // проверим, существует ли пользователь:
         getUserById(userId);
-        List<Booking> bookingList = bookingRepository.findAllByUserIdOrderByStartDesc(userId);
+        PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
+        List<Booking> bookingList = bookingRepository
+                .findAllByUserIdOrderByStartDesc(userId, pageRequest).getContent();
         bookingList = filterBookingList(bookingList, BookingFilterState.valueOf(state));
 
         return bookingList;
     }
 
     @Override
-    public List<Booking> getAllOwnerItemsBookings(Long userId, String state) {
+    public List<Booking> getAllOwnerItemsBookings(Long userId, String state, int from, int size) {
         log.debug("Попытка получить список объектов Booking по id владельца предметов.");
         checkStateFilter(state);
         // проверим, существует ли пользователь:
         getUserById(userId);
-        List<Booking> bookingList = bookingRepository.findAllByItemUserIdOrderByStartDesc(userId);
+        PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
+        List<Booking> bookingList = bookingRepository
+                .findAllByItemUserIdOrderByStartDesc(userId, pageRequest).getContent();
         bookingList = filterBookingList(bookingList, BookingFilterState.valueOf(state));
 
         return bookingList;
@@ -143,12 +149,12 @@ public class BookingServiceImpl implements BookingService {
                         .collect(Collectors.toList());
         }
 
-        return  bookingList;
+        return bookingList;
     }
 
     private void checkItemAvailable(Item item) {
         if (!item.getAvailable()) {
-            log.debug("{}: {}.", NotAvailableException.class.getSimpleName(), ITEM_NOT_AVAILABLE_MESSAGE);
+            log.debug("{}: {}", NotAvailableException.class.getSimpleName(), ITEM_NOT_AVAILABLE_MESSAGE);
             throw new NotAvailableException(ITEM_NOT_AVAILABLE_MESSAGE, ITEM_NOT_AVAILABLE_ADVICE);
         }
     }
@@ -165,7 +171,7 @@ public class BookingServiceImpl implements BookingService {
 
     private void checkBookingApprove(Booking booking) {
         if (booking.getStatus().equals(BookingStatus.APPROVED)) {
-            log.debug("{}: {}.", NotAvailableException.class.getSimpleName(), NOT_AVAILABLE_APPROVE_MESSAGE);
+            log.debug("{}: {}", NotAvailableException.class.getSimpleName(), NOT_AVAILABLE_APPROVE_MESSAGE);
             throw new NotAvailableException(NOT_AVAILABLE_APPROVE_MESSAGE, NOT_AVAILABLE_APPROVE_ADVICE);
         }
     }

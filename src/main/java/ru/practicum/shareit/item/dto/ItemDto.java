@@ -1,8 +1,9 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.booking.BookingForItemDto;
+import ru.practicum.shareit.booking.dto.BookingForItemDto;
+import ru.practicum.shareit.item.comment.CommentDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -32,4 +33,7 @@ public class ItemDto {
 
     // комментарии от пользователей:
     private List<CommentDto> comments;
+
+    // id запроса:
+    private Long requestId;
 }
