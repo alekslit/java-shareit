@@ -134,7 +134,7 @@ public class ItemServiceImpl implements ItemService {
                 .map(ItemDto::getId)
                 .collect(Collectors.toList());
         // находим все Booking:
-        List<Booking> bookingList = bookingRepository.findAllByItemIdInOrderByStartDesc(itemIdList);
+        List<Booking> bookingList = bookingRepository.findAllByItemIdInOrderByStartAsc(itemIdList);
         // проходим по списку Booking id-шниками Item:
         for (ItemDto item : itemDtoList) {
             List<Booking> itemBookings = bookingList.stream()

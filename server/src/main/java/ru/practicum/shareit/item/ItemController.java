@@ -52,11 +52,6 @@ public class ItemController {
         List<Item> itemList = service.findAllItemsByOwnerId(userId, from, size);
         List<ItemDto> itemWithBookings = service.addBookingsDtoToItem(ItemMapper.mapToItemDto(itemList));
         List<ItemDto> itemWithComments = service.addCommentToItem(itemWithBookings);
-/*
-        itemWithComments = itemWithComments.stream()
-                .sorted(Comparator.comparing(ItemDto::getId))
-                .collect(Collectors.toList());
-*/
 
         return itemWithComments.stream()
                 .sorted(Comparator.comparing(ItemDto::getId))
